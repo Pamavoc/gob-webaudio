@@ -1,0 +1,31 @@
+{
+  "type": "module",
+  "scripts": {
+    "start": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "capture-website": "^2.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "express-validator": "^6.11.1",
+    "filenamify": "^5.0.2",
+    "fs-extra": "^10.0.0",
+    "helmet": "^4.5.0",
+    "hpp": "^0.2.3",
+    "make-a-gif": "^2.0.2",
+    "p-limit": "^2.3.0",
+    "pageres": "^6.2.3",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.8",
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/preset-env": "^7.15.8",
+    "nodemon": "^2.0.14",
+    "rimraf": "^3.0.2"
+  }
+}
