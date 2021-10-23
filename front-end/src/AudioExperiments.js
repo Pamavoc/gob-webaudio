@@ -6,9 +6,11 @@ export class AudioExperiments {
         this.oscillator.connect(this.context.destination)
         this.movements = { leftJoystick: { topBottom: 0, leftRight: 0 }, rightJoystick: { topBottom: 0, leftRight: 0 } }
 
+      
+
         //initial positions
         this.posL = { x: 100, y: 100 }
-        this.posR = { x: 200, y: 200 }
+        this.posR = { x: 200, y: 100 }
 
         // todo audio ambiant flouté
 
@@ -20,14 +22,13 @@ export class AudioExperiments {
 
 
          this.url = window.location.href + 'assets/'; // all our medias are stored on dropbox
-         console.log(this.url)
-
+      
+        
          this.drum = {
             a_ctx: new AudioContext(),
             generate_sound: (part) => {
               
-            
-              // called each time we need to play a source
+      
               const source = this.drum.a_ctx.createBufferSource();
               source.buffer = part.buf;
               source.connect(this.drum.gain);
@@ -36,8 +37,7 @@ export class AudioExperiments {
               // simply store this sourceNode, and stop the previous one
               this.drum.parts.forEach(p => (p.source && p.source.stop(0)));
               // store the source
-              
-
+            
     
               part.source = source;
               source.start(0);
@@ -49,13 +49,53 @@ export class AudioExperiments {
               }
             },
             parts: [{
-                name: 'jazzman',
-                x: 90,
-                y: 116,
+                name: 'trompette',
+                x: 76,
+                y: 501,
+                w: 500,
+                h: 360,
+                audio_src: 'xscape.mp3'
+              },
+              {
+                name: 'piano',
+                x: 725,
+                y: 338,
                 w: 160,
                 h: 70,
-                audio_src: 'bip.mp3'
+                audio_src: '554-2.mp3'
               },
+              {
+                name: 'jazzman',
+                x: 600,
+                y: 736,
+                w: 160,
+                h: 70,
+                audio_src: 'ciela.mp3'
+              },
+              {
+                name: 'guitar',
+                x: 352,
+                y: 528,
+                w: 160,
+                h: 70,
+                audio_src: 'isometric.mp3'
+              },
+              {
+                name: 'strange',
+                x: 1500,
+                y: 300,
+                w: 160,
+                h: 70,
+                audio_src: 'routine.mp3'
+              },
+              {
+                name: 'special',
+                x: 1228,
+                y: 650,
+                w: 160,
+                h: 70,
+                audio_src: 'lostforever.mp3'
+              }
               
             ]
           };
@@ -172,7 +212,7 @@ export class AudioExperiments {
         this.posR.y = this.posR.y + this.setDeadzone(this.movements.rightJoystick.topBottom) * 10
        
       
-        document.body.style.backgroundColor = `hsl(${hue * 360},${saturation * 100}%,${lightness * 100}%)`;
+        //document.body.style.backgroundColor = `hsl(${hue * 360},${saturation * 100}%,${lightness * 100}%)`;
 
 
         if(gamepad.buttons[4].value === 1 && this.pressedLb !== true) {
@@ -221,4 +261,8 @@ export class AudioExperiments {
       this.soundPlaying = true
     }
    
+
+    startAmbiant() {
+      
+    }
 }

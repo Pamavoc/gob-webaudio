@@ -8,10 +8,7 @@ const baseUrl = 'http://localhost:4000'
 
 
 
-const ae = new AudioExperiments();
-
-const title = document.createElement('h1')
-title.innerHTML = 'Reveal with the torch and get sound'
+const ae = new AudioExperiments()
 
 const canvas = document.createElement('canvas')
 canvas.width = "1676";
@@ -21,22 +18,48 @@ canvas.style.width = "1676px"
 const ctx = canvas.getContext('2d')
 
 
-let patternEar;
+let patternPlayer;
+let patternEL;
+let patternER;
 
 var img = new Image();
-img.src = './assets/map.jpg';
+img.src = './assets/map2.jpg';
 img.onload = function() {
   var pattern = ctx.createPattern(img, 'no-repeat');
   ctx.fillStyle = pattern;
   ctx.fillRect(0, 0, 1676, 814);
 };
 
-var earImg = new Image();
-earImg.src = './assets/boi.png';
-earImg.onload = function() {
-  patternEar = ctx.createPattern(earImg, 'no-repeat');
-  ctx.fillStyle = patternEar;
+
+
+let boi = './assets/detective-man.png'
+let girl = './assets/detective-woman.png'
+
+let playerImg = new Image();
+
+
+
+let earL = new Image();
+earL.src = './assets/earL.png';
+earL.onload = function() {
+  patternEL = ctx.createPattern(earL, 'no-repeat');
+  ctx.fillStyle = patternEL;
 };
+
+let earR = new Image();
+earR.src = './assets/earR.png';
+earR.onload = function() {
+  patternER = ctx.createPattern(earR, 'no-repeat');
+  ctx.fillStyle = patternER;
+};
+
+const createPlayer = (src) => {
+  playerImg.src = src;
+  playerImg.onload = function() {
+    patternPlayer = ctx.createPattern(playerImg, 'no-repeat');
+    ctx.fillStyle = patternPlayer;
+  };
+}
 
 
 let i = 0;
@@ -81,6 +104,8 @@ const updateGamepad = () => {
 
   gamepad = newGamepad
 
+
+
 }
 const gameLoop = () => {
  
@@ -108,7 +133,7 @@ const gameLoop = () => {
   const posL = ae.returnPosLeft()
 
   const torch = new Path2D();
-  torch.arc(Math.round(posL.x), Math.round(posL.y), 50, 0,  2 * Math.PI);
+  torch.arc(Math.round(posR.x), Math.round(posR.y), 100, 0,  2 * Math.PI);
   ctx.fill(torch)
 
   //Bordures du canvas 
@@ -128,13 +153,22 @@ const gameLoop = () => {
     posR.y = canvas.height
   }
 
-  const ear = new Path2D();
+
+  const earLeft = new Path2D();
+
+
+  const earRight = new Path2D();
+
+
+
   //on check en permanence si la zone qui est hover contient un élement sonore jouable
   mouse_hovered = ae.isHover(Math.round(posR.x) - canvas.offsetLeft, Math.round(posR.y) - canvas.offsetTop)
     if (mouse_hovered) {
       
-      
-      ctx.drawImage(earImg, Math.round(posR.x), Math.round(posR.y), earImg.width*2, earImg.height*2);
+  
+      ctx.drawImage(earR, Math.round(posR.x + 0), Math.round(posR.y - 10),  earR.width*0.3, earR.height*0.3);
+      ctx.drawImage(earL, Math.round(posR.x - 50), Math.round(posR.y - 10),  earL.width*0.3, earL.height*0.3);
+
       soundPlayed = ae.returnSoundPlayed()
 
       if(rbPressed === true && soundPlayed === false) {
@@ -144,11 +178,19 @@ const gameLoop = () => {
       } 
     } else {
      
-      ctx.drawImage(earImg, Math.round(posR.x), Math.round(posR.y));
+      ctx.drawImage(earR, Math.round(posR.x + 8), Math.round(posR.y + 5), earR.width*0.15, earR.height*0.15);
+      ctx.drawImage(earL, Math.round(posR.x - 32), Math.round(posR.y + 5), earL.width*0.15, earL.height*0.15);
   }
   
 
-  ctx.fill(ear)
+  
+  ctx.fill(earRight)
+  ctx.fill(earLeft)
+  const player = new Path2D();
+  
+  ctx.drawImage(playerImg, Math.round(posR.x - 25), Math.round(posR.y));
+  ctx.fill(player)
+ 
 
 
   i++
@@ -177,23 +219,36 @@ btnStart.addEventListener('click', ()=> {
 
   
 document.addEventListener('DOMContentLoaded', () => {
+  updateGamepad()
+
   const app = document.getElementById('app')
-  app.append(title)
   app.append(canvas)
   app.append(btnStart)
   gameLoop()
-  updateGamepad()
 
-  // createScreenShots()
+ 
 })
 
-
+let playerChoosen = false;
 document.addEventListener("gamepadButtonDown", (event) => {
   console.log(`Gamepad Button ${event.detail.buttonIndex} pressed`);
 
   if(event.detail.buttonIndex === 5) {
     rbPressed = true 
   }
+
+  // man
+  if(event.detail.buttonIndex === 2 && playerChoosen === false) {
+    
+    
+
+    document.querySelector('.square').style.transform = "scale(0.8)"
+  //woman
+  } else if(event.detail.buttonIndex === 1 && playerChoosen === false) {
+    document.querySelector('.circle').style.transform = "scale(0.8)"
+    
+  }
+  
 });
 document.addEventListener("gamepadButtonUp", (event) => {
   console.log(`Gamepad Button ${event.detail.buttonIndex} released`);
@@ -201,6 +256,25 @@ document.addEventListener("gamepadButtonUp", (event) => {
   if(event.detail.buttonIndex === 5) {
     rbPressed = false
   }
+
+ // man
+ if(event.detail.buttonIndex === 2 && playerChoosen === false) {
+  playerChoosen = true
+
+  
+  createPlayer(boi)
+  document.querySelector('.home').remove()
+  createScreenShots()
+
+//woman
+} else if(event.detail.buttonIndex === 1 && playerChoosen === false) {
+  playerChoosen = true
+
+  createPlayer(girl)
+  document.querySelector('.home').remove()
+  createScreenShots()
+
+}
 });
 
 
@@ -223,7 +297,7 @@ function createScreenShots() {
         })
       );
     });
-  }, 15000);
+  }, 5000);
   
 
 }
