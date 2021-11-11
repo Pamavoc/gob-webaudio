@@ -14,7 +14,6 @@ import pLimit from 'p-limit';
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
-
 app.use(express.json());
 app.use(hpp()); 
 app.use(helmet());
@@ -24,13 +23,17 @@ const corsOptions = {
   origin: "https://canvas.pamavoc.com"
 };
 
+
 const dirPath = path.join(__dirname, '/screenshots');
 const gifPath = path.join(__dirname, '/gifs');
 
 const arrayOfImages = []
 const options = {
-	width:1614,
-	height: 812,
+	width: 1676,
+	height: 814,
+  hideElements: [
+		'.home',
+	]
 };
 
 const urlClient = 'https://canvas.pamavoc.com'
@@ -45,6 +48,7 @@ app.listen(PORT, () => {
 
 
 
+
 // Affiche toute la bdd
 app.get('/', (req, res) => {
      res.send('hello');
@@ -52,7 +56,8 @@ app.get('/', (req, res) => {
 })
 
 
-app.use('/gifs', express.static('gifs')); 
+
+app.use(express.static(__dirname + '/gifs'));
 
 
 let clientUuid;
@@ -69,15 +74,6 @@ app.get('/stream/uuid', async (req, res) => {
 
 function capture(filename) {
   return captureWebsite.file(urlClient, `${dirPath}/${filename}.jpeg`, options);
-}
-
-async function createScreen() {
-
-  await Promise.all(arrayOfImages.map(async (filename) => {
-    return captureWebsite.file(urlClient, `${dirPath}/${filename.screenshot}.jpeg`, options);
-  })).then(() => makeAGif());
-
-
 }
 
 async function makeAGif() {
