@@ -82,6 +82,7 @@ const updateGamepad = () => {
   gamepad = newGamepad
 
 }
+
 const gameLoop = () => {
  
   ctx.beginPath()
@@ -183,8 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
   app.append(btnStart)
   gameLoop()
   updateGamepad()
-
-  // createScreenShots()
+  createScreenShots()
 })
 
 

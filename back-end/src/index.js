@@ -21,7 +21,7 @@ app.use(helmet());
 
 
 const corsOptions = {
-  origin: "http://localhost:9000"
+  origin: "https://canvas.pamavoc.com"
 };
 
 const dirPath = path.join(__dirname, '/screenshots');
@@ -33,7 +33,7 @@ const options = {
 	height: 812,
 };
 
-const urlClient = 'http://localhost:9000'
+const urlClient = 'https://canvas.pamavoc.com'
 
 //registering cors
 app.use(cors(corsOptions));
