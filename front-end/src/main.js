@@ -1,4 +1,3 @@
-import config from './config.js'
 import { Sse } from './Sse'
 import { AudioExperiments } from './AudioExperiments'
 
